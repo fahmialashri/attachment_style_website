@@ -161,7 +161,7 @@ const questions = [
     type: "secure",
   },
   {
-    q: "Saya tidak merasa cemas jika pasangan saya sibuk for a while.",
+    q: "Saya tidak merasa cemas jika pasangan saya sibuk untuk waktu yang lama.",
     type: "secure",
   },
   {
