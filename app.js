@@ -1512,27 +1512,27 @@ function getInterpretationLevel(score) {
 function getDevelopmentAreas(dominantStyle) {
   const areas = {
     secure: [
-      "Mempertahankan keseimbangan yang sudah baik antara kemandirian dan kedekatan",
-      "Mengembangkan kemampuan membantu orang lain dengan attachment style yang berbeda",
-      "Meningkatkan kesadaran akan dinamika hubungan dalam konteks yang lebih luas",
+      "Mempertahankan keseimbangan yang baik antara kemandirian dan kedekatan",
+      "Mengembangkan kemampuan untuk membantu orang lain yang memiliki gaya keterikatan berbeda",
+      "Meningkatkan kesadaran terhadap dinamika hubungan dalam konteks yang lebih luas",
     ],
     anxious: [
-      "Mengembangkan self-soothing techniques untuk mengelola kecemasan attachment",
-      "Membangun kepercayaan diri dan self-worth yang tidak bergantung pada validasi eksternal",
-      "Melatih toleransi terhadap ketidakpastian dalam hubungan interpersonal",
-      "Mengembangkan kemampuan komunikasi assertive yang tidak demanding",
+      "Mengembangkan teknik menenangkan diri untuk mengelola kecemasan dalam hubungan",
+      "Membangun rasa percaya diri dan harga diri yang tidak bergantung pada pengakuan dari orang lain",
+      "Melatih kemampuan menerima ketidakpastian dalam hubungan",
+      "Mengembangkan kemampuan berkomunikasi tegas tanpa menuntut berlebihan",
     ],
     avoidant: [
-      "Mengembangkan comfort dengan emotional vulnerability dan ekspresi emosi",
+      "Mengembangkan kenyamanan dalam bersikap terbuka secara emosional dan mengekspresikan perasaan",
       "Melatih kemampuan untuk meminta dan menerima dukungan emosional",
-      "Membangun toleransi terhadap keintiman dan kedekatan emosional",
-      "Mengembangkan awareness terhadap kebutuhan attachment yang ditekan",
+      "Meningkatkan toleransi terhadap keintiman dan kedekatan emosional",
+      "Menumbuhkan kesadaran terhadap kebutuhan keterikatan yang selama ini ditekan",
     ],
     fearful: [
-      "Membangun konsistensi dalam pola attachment dan mengurangi ambivalensi",
-      "Mengembangkan self-regulation skills untuk mengelola emotional dysregulation",
+      "Membangun konsistensi dalam pola keterikatan dan mengurangi rasa tarik-ulur",
+      "Mengembangkan keterampilan mengatur emosi untuk mencegah ketidakstabilan perasaan",
       "Membangun kepercayaan secara bertahap dalam hubungan yang aman",
-      "Mengelola trauma attachment masa lalu yang mungkin memengaruhi pola saat ini",
+      "Mengelola trauma masa lalu yang memengaruhi pola keterikatan saat ini",
     ],
   };
 
