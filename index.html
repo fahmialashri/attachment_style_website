@@ -25,6 +25,15 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero">
+      <div class="hero-ornaments">
+        <span class="orb o1"></span>
+        <span class="orb o2"></span>
+        <span class="orb o3"></span>
+        <span class="orb o4"></span>
+        <span class="orb o5"></span>
+        <span class="orb o6"></span>
+      </div>
+      <div class="hero-waves"></div>
       <div class="hero-content fade-in">
         <h1>Discover Your<br />Attachment Style</h1>
         <p>
@@ -52,6 +61,12 @@
     <main>
       <!-- About Section -->
       <section id="about" class="content-section">
+        <div class="about-ornaments">
+          <div class="blob b1"></div>
+          <div class="blob b2"></div>
+          <div class="blob b3"></div>
+          <div class="rays"></div>
+        </div>
         <div class="container">
           <h2 class="section-title reveal">
             Memahami Gaya Keterikatan Emosional Anda
@@ -245,7 +260,7 @@
           <div>
             <strong>Isi data peserta</strong>
             <div style="color: #7f8c8d; margin-top: 4px">
-              Nama & email (opsional)
+              Nama & email wajib di isi
             </div>
           </div>
           <div class="form-inputs">
@@ -306,9 +321,20 @@
         </div>
         <canvas id="resultChart"></canvas>
         <div class="result-grid" id="resultGrid"></div>
+
+        <!-- Detail Hasil (tersembunyi default), diletakkan DI ATAS tombol download -->
+        <div
+          id="resultDetails"
+          class="result-details"
+          style="max-width: 840px; margin: 0 auto 16px; display: none"
+        ></div>
+
         <div style="text-align: center; margin-top: 30px">
           <div class="btn-group" style="justify-content: center">
             <button class="btn ghost" id="retakeBtn">🔄 Ulangi Tes</button>
+            <button class="btn ghost" id="detailBtn">
+              🔎 Lihat Detail Hasil
+            </button>
             <button class="btn btn-primary" id="downloadBtn">
               📥 Download PDF
             </button>

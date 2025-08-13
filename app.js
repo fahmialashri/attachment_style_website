@@ -305,6 +305,8 @@ const downloadBtn = document.getElementById("downloadBtn");
 const resultStyleImage = document.getElementById("resultStyleImage");
 const resultStyleCaption = document.getElementById("resultStyleCaption");
 const resultStyleFigure = document.getElementById("resultStyleFigure");
+const resultDetails = document.getElementById("resultDetails");
+const detailBtn = document.getElementById("detailBtn");
 
 let answers = new Array(questions.length).fill(null);
 let current = 0;
@@ -780,6 +782,17 @@ async function finishAndSave() {
   }
 
   renderChart(computed.perc);
+
+  // Detail Hasil: render + tampilkan + animasi
+  renderDetails(computed);
+  if (resultDetails) {
+    resultDetails.style.display = "block";
+    resultDetails.classList.add("show");
+    resultDetails.scrollIntoView({ behavior: "smooth", block: "center" });
+  }
+  if (detailBtn) {
+    detailBtn.textContent = "🫣 Sembunyikan Detail";
+  }
 
   // Prepare data for Firestore - WITH REQUIRED FIELDS
   const dataToSave = {
@@ -1512,27 +1525,30 @@ function getInterpretationLevel(score) {
 function getDevelopmentAreas(dominantStyle) {
   const areas = {
     secure: [
-      "Mempertahankan keseimbangan yang baik antara kemandirian dan kedekatan",
-      "Mengembangkan kemampuan untuk membantu orang lain yang memiliki gaya keterikatan berbeda",
-      "Meningkatkan kesadaran terhadap dinamika hubungan dalam konteks yang lebih luas",
+      "Praktik mindfulness untuk mempertahankan regulasi emosi yang baik",
+      "Keterlibatan dalam dukungan sebaya atau pendampingan untuk berbagi pengalaman positif",
+      "Kontinuitas dalam membangun dan mempertahankan hubungan yang sehat",
     ],
     anxious: [
-      "Mengembangkan teknik menenangkan diri untuk mengelola kecemasan dalam hubungan",
-      "Membangun rasa percaya diri dan harga diri yang tidak bergantung pada pengakuan dari orang lain",
-      "Melatih kemampuan menerima ketidakpastian dalam hubungan",
-      "Mengembangkan kemampuan berkomunikasi tegas tanpa menuntut berlebihan",
+      "Terapi Perilaku Kognitif (CBT) untuk mengatasi pikiran cemas dan kecenderungan membuat skenario terburuk",
+      "Intervensi berbasis mindfulness untuk meningkatkan kesadaran saat ini",
+      "Terapi pemaparan bertahap untuk membangun toleransi terhadap ketidakpastian",
+      "Latihan belas kasih terhadap diri untuk mengurangi kritik diri",
+      "Menulis jurnal untuk melacak pola emosi dan pemicu",
     ],
     avoidant: [
-      "Mengembangkan kenyamanan dalam bersikap terbuka secara emosional dan mengekspresikan perasaan",
-      "Melatih kemampuan untuk meminta dan menerima dukungan emosional",
-      "Meningkatkan toleransi terhadap keintiman dan kedekatan emosional",
-      "Menumbuhkan kesadaran terhadap kebutuhan keterikatan yang selama ini ditekan",
+      "Terapi Berfokus Emosi (EFT) untuk mengembangkan kesadaran emosi",
+      "Pemaparan bertahap terhadap kerentanan dalam hubungan terapeutik yang aman",
+      "Terapi berbasis keterikatan untuk mengeksplorasi pengalaman keterikatan awal",
+      "Pendekatan somatik untuk meningkatkan kesadaran tubuh dan kepekaan emosi",
+      "Pelatihan keterampilan komunikasi untuk mengekspresikan kebutuhan dan emosi",
     ],
     fearful: [
-      "Membangun konsistensi dalam pola keterikatan dan mengurangi rasa tarik-ulur",
-      "Mengembangkan keterampilan mengatur emosi untuk mencegah ketidakstabilan perasaan",
-      "Membangun kepercayaan secara bertahap dalam hubungan yang aman",
-      "Mengelola trauma masa lalu yang memengaruhi pola keterikatan saat ini",
+      "Terapi berlandaskan pemahaman trauma untuk mengeksplorasi luka keterikatan masa lalu",
+      "Keterampilan Terapi Perilaku Dialektis (DBT) untuk regulasi emosi",
+      "Terapi Internal Family Systems (IFS) untuk mengintegrasikan bagian-bagian internal yang saling berkonflik",
+      "Terapi EMDR jika ada trauma keterikatan yang signifikan",
+      "Hubungan terapeutik yang konsisten untuk membangun landasan yang aman",
     ],
   };
 
@@ -1897,4 +1913,193 @@ function getActionTips(dominant) {
       true
     );
   })();
+})();
+
+function renderDetails(computed) {
+  if (!resultDetails) return;
+  const { perc, dominant } = computed;
+  const meta = STYLE_META_PDF[dominant] || {
+    label: capitalize(dominant),
+    color: "#667eea",
+    icon: "✨",
+  };
+  const order = ["secure", "anxious", "avoidant", "fearful"];
+
+  const cards = order
+    .map((key, i) => {
+      const p = perc[key];
+      const m = STYLE_META_PDF[key];
+      return `
+        <div class="detail-card" style="--accent:${m.color}; --delay:${
+        0.05 * i
+      }s">
+          <div class="card-head">
+            <span class="icon">${m.icon}</span>
+            <span class="label">${m.label}</span>
+            <span class="badge">${getInterpretationLevel(p)}</span>
+          </div>
+          <div class="meter"><span class="meter-fill" data-value="${p}"></span></div>
+          <div class="percent"><span class="count" data-target="${p}">0</span>%</div>
+          <div class="desc">${escape(getShortMeaning(key))}</div>
+        </div>
+      `;
+    })
+    .join("");
+
+  const tips = getActionTips(dominant)
+    .map((t) => `<li>${escape(t)}</li>`)
+    .join("");
+
+  resultDetails.innerHTML = `
+    <div class="detail-panel" style="--accent:${meta.color}">
+      <div class="detail-header">
+        <div class="pill"><span class="icon">${
+          meta.icon
+        }</span> Dominan: ${escape(meta.label)}</div>
+        <div class="subtitle">${escape(getShortMeaning(dominant))}</div>
+      </div>
+      <div class="detail-grid">${cards}</div>
+      <div class="tips">
+        <div class="tips-title">Saran Aksi Rekomendasi</div>
+        <ul>${tips}</ul>
+      </div>
+    </div>
+  `;
+
+  // Animasi bar progres & angka
+  requestAnimationFrame(() => {
+    resultDetails.querySelectorAll(".meter-fill").forEach((el) => {
+      const val = parseInt(el.getAttribute("data-value") || "0", 10);
+      el.style.width = val + "%";
+    });
+    const t0 = performance.now();
+    const dur = 900;
+    resultDetails.querySelectorAll(".count").forEach((el) => {
+      const target = parseInt(el.getAttribute("data-target") || "0", 10);
+      function step(ts) {
+        const k = Math.min(1, (ts - t0) / dur);
+        el.textContent = String(Math.round(target * k));
+        if (k < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  });
+}
+
+// Toggle "Lihat Detail Hasil"
+if (detailBtn) {
+  detailBtn.addEventListener("click", () => {
+    if (!resultDetails) return;
+    const isShown = resultDetails.style.display !== "none";
+    if (isShown) {
+      resultDetails.style.display = "none";
+      resultDetails.classList.remove("show");
+      detailBtn.textContent = "🔎 Lihat Detail Hasil";
+    } else {
+      const computed = computeScores();
+      renderDetails(computed);
+      resultDetails.style.display = "block";
+      resultDetails.classList.add("show");
+      detailBtn.textContent = "🫣 Sembunyikan Detail";
+      resultDetails.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+}
+
+if (resultDetails) {
+  resultDetails.style.display = "none";
+  resultDetails.innerHTML = "";
+}
+if (detailBtn) {
+  detailBtn.textContent = "🔎 Lihat Detail Hasil";
+}
+
+// Detail Hasil (default tersembunyi)
+renderDetails(computed);
+if (resultDetails) resultDetails.style.display = "none";
+if (detailBtn) detailBtn.textContent = "🔎 Lihat Detail Hasil";
+
+// Random movement for hero orbs (smooth, tanpa layout thrash)
+(function initRandomOrbs() {
+  const hero = document.getElementById("hero");
+  if (!hero) return;
+
+  let container = hero.querySelector(".hero-ornaments");
+  if (!container) {
+    container = document.createElement("div");
+    container.className = "hero-ornaments";
+    hero.appendChild(container);
+  }
+
+  // Jika orbs belum ada, buat 6
+  if (container.querySelectorAll(".orb").length === 0) {
+    for (let i = 1; i <= 6; i++) {
+      const s = document.createElement("span");
+      s.className = `orb o${i}`;
+      container.appendChild(s);
+    }
+  }
+
+  const orbs = Array.from(container.querySelectorAll(".orb"));
+
+  function rand(min, max) {
+    return Math.random() * (max - min) + min;
+  }
+
+  function placeRandom(orb, instant = false) {
+    const rect = hero.getBoundingClientRect();
+    // Batas padding agar tidak mepet tepi
+    const padW = Math.max(16, rect.width * 0.06);
+    const padH = Math.max(16, rect.height * 0.1);
+
+    // Posisi target dalam pixel
+    const x = rand(padW, rect.width - padW);
+    const y = rand(padH, rect.height - padH);
+    const scale = rand(0.85, 1.25);
+    const dur = Math.floor(rand(6000, 12000)); // durasi transisi
+
+    orb.style.setProperty("--dur", `${dur}ms`);
+
+    if (instant) {
+      // Matikan transition sekali saat penempatan awal
+      const prev = orb.style.transition;
+      orb.style.transition = "none";
+      orb.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+      // Force reflow lalu kembalikan transition
+      requestAnimationFrame(() => {
+        orb.style.transition = prev || "";
+      });
+    } else {
+      orb.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
+    }
+
+    // Jadwalkan pergerakan berikutnya dengan sedikit jitter
+    clearTimeout(orb._timer);
+    orb._timer = setTimeout(() => placeRandom(orb), dur + rand(500, 1600));
+  }
+
+  // Tempatkan awal secara instan agar tidak "lompat"
+  orbs.forEach((o) => placeRandom(o, true));
+
+  // Recalculate saat resize
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      orbs.forEach((o) => placeRandom(o));
+    }, 200);
+  });
+
+  // Parallax halus mengikuti pointer (opsional)
+  hero.addEventListener("pointermove", (e) => {
+    const r = hero.getBoundingClientRect();
+    const cx = r.left + r.width / 2;
+    const cy = r.top + r.height / 2;
+    const px = (e.clientX - cx) / r.width;
+    const py = (e.clientY - cy) / r.height;
+    const maxOffset = 8; // px
+    container.style.transform = `translate3d(${(-px * maxOffset).toFixed(
+      2
+    )}px, ${(-py * maxOffset).toFixed(2)}px, 0)`;
+  });
 })();

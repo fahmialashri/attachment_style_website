@@ -489,3 +489,296 @@ body.ee::before {
 }
 
 #hero h1 { pointer-events: auto; cursor: pointer; user-select: none; }
+
+/* ===== Result Details Animated ===== */
+#resultDetails { opacity: 0; transition: opacity .25s ease; }
+#resultDetails.show { opacity: 1; }
+
+#resultDetails .detail-panel {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0,0,0,.08);
+  overflow: hidden;
+}
+
+#resultDetails .detail-header {
+  padding: 18px 20px;
+  text-align: center;
+  background:
+    radial-gradient(1200px 80px at 50% -40px, var(--accent, #667eea) 0%, transparent 70%),
+    linear-gradient(180deg, #f8fafc, #ffffff 50%);
+  border-bottom: 1px solid #eef2f7;
+}
+#resultDetails .detail-header .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  color: #0f172a;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(102,126,234,.08);
+  border: 1px solid rgba(102,126,234,.2);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.6);
+}
+#resultDetails .detail-header .pill .icon { filter: drop-shadow(0 2px 6px rgba(0,0,0,.15)); }
+#resultDetails .detail-header .subtitle {
+  margin-top: 10px;
+  color: #6b7280;
+  font-size: .95rem;
+}
+
+#resultDetails .detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+  padding: 16px;
+}
+
+#resultDetails .detail-card {
+  background: #ffffff;
+  border: 1px solid #eef2f7;
+  border-radius: 14px;
+  padding: 14px;
+  box-shadow: 0 10px 24px rgba(2,6,23,.05);
+  transform: translateY(6px) scale(.98);
+  opacity: 0;
+  animation: popIn .5s var(--delay, 0s) ease forwards;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+#resultDetails .detail-card:hover {
+  transform: translateY(-4px) scale(1);
+  box-shadow: 0 16px 36px rgba(2,6,23,.12);
+}
+
+#resultDetails .detail-card .card-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  margin-bottom: 10px;
+}
+#resultDetails .detail-card .card-head .icon { font-size: 1.1rem; }
+#resultDetails .detail-card .card-head .label { font-weight: 800; color: #111827; }
+#resultDetails .detail-card .card-head .badge {
+  font-size: .75rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent, #667eea) 18%, #ffffff);
+  color: #0f172a;
+  border: 1px solid color-mix(in srgb, var(--accent, #667eea) 40%, #ffffff);
+}
+
+#resultDetails .meter {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+#resultDetails .meter + .percent { margin-top: 8px; }
+
+#resultDetails .meter-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent, #667eea) 88%, #ffffff), var(--accent, #667eea));
+  box-shadow: inset 0 0 10px rgba(255,255,255,.35), 0 2px 10px color-mix(in srgb, var(--accent, #667eea) 35%, transparent);
+  transition: width .9s cubic-bezier(.2,.8,.2,1);
+}
+
+#resultDetails .percent { font-weight: 800; color: #111827; }
+#resultDetails .desc { font-size: .92rem; color: #6b7280; margin-top: 8px; }
+
+#resultDetails .tips {
+  border-top: 1px dashed #e5e7eb;
+  margin-top: 4px;
+  padding: 12px 16px 16px 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+}
+#resultDetails .tips-title {
+  font-weight: 800; color: #0f172a; margin-bottom: 8px;
+}
+#resultDetails .tips ul {
+  padding-left: 18px;
+  color: #475569;
+  line-height: 1.6;
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: translateY(12px) scale(.96); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 520px) {
+  #resultDetails .detail-grid { grid-template-columns: 1fr; }
+}
+
+/* ===== Global subtle animated gradient ===== */
+body {
+  background-size: 220% 220%;
+  animation: bgShift 22s ease-in-out infinite;
+}
+@keyframes bgShift {
+  0%   { background-position: 0% 0%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 0%; }
+}
+
+/* ===== Hero Ornaments ===== */
+/* Matikan waves (jika masih ada style sebelumnya) */
+.hero-waves { display: none !important; }
+
+/* Orbs dengan kontrol via transform (tanpa keyframes drift tetap) */
+.hero { position: relative; overflow: hidden; }
+.hero-ornaments { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+
+.hero-ornaments .orb {
+  position: absolute;
+  width: clamp(18px, 1.6vw + 10px, 34px);
+  height: clamp(18px, 1.6vw + 10px, 34px);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.95), rgba(255,255,255,.08) 60%, transparent 70%);
+  opacity: .8;
+  filter: blur(.2px);
+  animation: orbFloat var(--dur, 9s) ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Posisi + variasi durasi/delay */
+.hero-ornaments .o1 { top: 12%; left: 12%; --dur: 8s; animation-delay: 0s; }
+.hero-ornaments .o2 { top: 24%; right: 10%; --dur: 9.5s; animation-delay: .6s; left: auto; }
+.hero-ornaments .o3 { bottom: 22%; left: 18%; --dur: 10s; animation-delay: 1.2s; top: auto; }
+.hero-ornaments .o4 { top: 40%; left: 46%; --dur: 8.8s; animation-delay: 1.8s; }
+.hero-ornaments .o5 { bottom: 16%; right: 16%; --dur: 9.2s; animation-delay: 2.4s; left: auto; top: auto; }
+.hero-ornaments .o6 { top: 64%; left: 64%; --dur: 10.4s; animation-delay: 3s; }
+
+@keyframes orbFloat {
+  0%   { transform: translate3d(0, 0, 0) scale(1);    opacity: .72; }
+  25%  { transform: translate3d(3px, -8px, 0) scale(1.04); opacity: .86; }
+  50%  { transform: translate3d(0, -14px, 0) scale(1.08);  opacity: .95; }
+  75%  { transform: translate3d(-3px, -8px, 0) scale(1.04); opacity: .86; }
+  100% { transform: translate3d(0, 0, 0) scale(1);    opacity: .72; }
+}
+
+/* Decorative waves bawah hero */
+.hero-waves {
+  position: absolute;
+  left: 0; right: 0; bottom: -30px;
+  height: 180px;
+  background:
+    radial-gradient(120px 30px at 20% 30%, rgba(255,255,255,.18), transparent 70%),
+    radial-gradient(140px 28px at 60% 60%, rgba(255,255,255,.12), transparent 70%),
+    radial-gradient(120px 26px at 80% 40%, rgba(255,255,255,.12), transparent 70%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.14) 0 2px, transparent 2px 12px);
+  opacity: .7;
+  animation: waveSlide 16s linear infinite;
+  filter: blur(.2px);
+  z-index: 1;
+}
+@keyframes waveSlide {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 200px 0, -260px 0, 160px 0, 260px 0; }
+}
+
+/* ===== About Ornaments (blobs + rays) ===== */
+#about .container { position: relative; }
+.about-ornaments {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.about-ornaments .blob {
+  position: absolute;
+  width: 360px; height: 360px;
+  border-radius: 50%;
+  filter: blur(30px);
+  opacity: .25;
+  will-change: transform, opacity;
+  animation: blobDrift 26s ease-in-out infinite;
+}
+.about-ornaments .b1 {
+  top: -40px; left: -80px;
+  background: radial-gradient(circle at 30% 30%, #8da2fb, #6366f1 60%, transparent 70%);
+  animation-delay: 0s;
+}
+.about-ornaments .b2 {
+  bottom: -60px; right: -60px;
+  width: 420px; height: 420px;
+  background: radial-gradient(circle at 70% 70%, #f59e0b, #f97316 60%, transparent 70%);
+  animation-delay: .8s;
+}
+.about-ornaments .b3 {
+  top: 30%; right: 10%;
+  width: 280px; height: 280px;
+  background: radial-gradient(circle at 60% 40%, #22c55e, #16a34a 60%, transparent 70%);
+  animation-delay: 1.6s;
+}
+@keyframes blobDrift {
+  0%,100% { transform: translate(0, 0) scale(1); opacity: .22; }
+  50% { transform: translate(20px, -14px) scale(1.06); opacity: .32; }
+}
+
+/* Rays halus di tengah section about */
+.about-ornaments .rays {
+  position: absolute;
+  left: 50%; top: 35%;
+  width: 720px; height: 720px;
+  transform: translate(-50%, -50%);
+  background:
+    conic-gradient(from 0deg,
+      rgba(255,255,255,.0) 0deg,
+      rgba(255,255,255,.18) 6deg,
+      rgba(255,255,255,.0) 12deg);
+  -webkit-mask: radial-gradient(circle, rgba(0,0,0,.8) 0 40%, transparent 60%);
+  mask: radial-gradient(circle, rgba(0,0,0,.8) 0 40%, transparent 60%);
+  animation: raysSpin 24s linear infinite;
+  opacity: .55;
+}
+@keyframes raysSpin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Pastikan konten about di atas ornaments */
+#about .section-title, #about .section-subtitle, #styles { position: relative; z-index: 1; }
+
+/* ===== Styles Section: tilting + sparkles ===== */
+.style-image { position: relative; transform-style: preserve-3d; transition: transform .35s ease; }
+.style-row:hover .style-image {
+  transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
+}
+.style-image::before {
+  content: "";
+  position: absolute; inset: -2px;
+  border-radius: 22px;
+  pointer-events: none;
+  background:
+    radial-gradient(2px 2px at 20px 20px, rgba(255,255,255,.35) 0 40%, transparent 60%),
+    radial-gradient(2px 2px at 60px 50px, rgba(255,255,255,.25) 0 40%, transparent 60%),
+    radial-gradient(2px 2px at 120px 80px, rgba(255,255,255,.45) 0 40%, transparent 60%);
+  background-size: 140px 140px;
+  mix-blend-mode: overlay;
+  opacity: .35;
+  animation: sparkle 6s linear infinite;
+}
+@keyframes sparkle {
+  0% { background-position: 0 0, 0 0, 0 0; }
+  100% { background-position: 140px 0, -140px 0, 70px 0; }
+}
+
+/* Subtle pop untuk cards di Styles saat viewport masuk */
+.style-row.reveal { transform: translateY(22px); opacity: 0; }
+.style-row.reveal.in, .style-row.reveal.active {
+  transform: translateY(0);
+  opacity: 1;
+  transition: all .6s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Responsive tweaks agar ornaments tidak mengganggu di mobile */
+@media (max-width: 768px) {
+  .hero-waves { height: 120px; bottom: -20px; }
+  .about-ornaments .rays { width: 520px; height: 520px; opacity: .45; }
+  .about-ornaments .blob { filter: blur(22px); opacity: .22; }
+}
